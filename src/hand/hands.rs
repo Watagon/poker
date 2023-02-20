@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
-pub enum Hands {
+pub(crate) enum Hands {
     // opt
     _FiveOfAKind = 10,
     StraightFlush = 9,

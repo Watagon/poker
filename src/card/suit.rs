@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
-pub enum Suit {
+pub(crate) enum Suit {
     Heart,
     Diamond,
     Clover,

@@ -1,8 +1,8 @@
-mod card;
-mod hand;
+pub(crate) mod card;
+pub(crate) mod hand;
 
-pub use card::{Card, Number};
-pub use hand::Hand;
+use card::{Card, Number};
+use hand::Hand;
 
 use itertools::Itertools;
 

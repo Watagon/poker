@@ -1,7 +1,7 @@
 use std::ops::Add;
 
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
-pub struct Number(pub u8);
+pub(crate) struct Number(pub u8);
 
 impl From<&str> for Number {
     fn from(value: &str) -> Self {

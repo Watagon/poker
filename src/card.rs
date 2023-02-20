@@ -1,11 +1,11 @@
 mod number;
 mod suit;
 
-pub use number::Number;
-pub use suit::Suit;
+pub(crate) use number::Number;
+pub(crate) use suit::Suit;
 
 #[derive(Debug, Clone)]
-pub struct Card {
+pub(crate) struct Card {
     pub kind: Suit,
     pub num: Number,
 }

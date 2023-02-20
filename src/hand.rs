@@ -1,13 +1,13 @@
 mod hands;
 
-pub use hands::Hands;
+use hands::Hands;
 
 use crate::{Card, Number};
 use itertools::Itertools;
 use std::cell::RefCell;
 
 #[derive(Debug, PartialEq)]
-pub struct Hand(Vec<Card>, RefCell<Option<(Hands, Vec<Number>)>>);
+pub(crate) struct Hand(Vec<Card>, RefCell<Option<(Hands, Vec<Number>)>>);
 
 impl Hand {
     fn hand(&self) -> (Hands, Vec<Number>) {
