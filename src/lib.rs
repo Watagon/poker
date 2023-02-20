@@ -1,7 +1,5 @@
-use std::{cell::RefCell, ops::Add};
-
 use itertools::Itertools;
-
+use std::{cell::RefCell, ops::Add};
 
 /// Given a list of poker hands, return a list of those hands which win.
 ///
@@ -26,7 +24,8 @@ pub fn winning_hands<'a>(hands_strs: &[&'a str]) -> Vec<&'a str> {
         })
         .into_iter()
         .sorted_by_key(|a| a.0)
-        .map(|a| hands_strs[a.0]).collect()
+        .map(|a| hands_strs[a.0])
+        .collect()
 }
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
