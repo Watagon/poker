@@ -237,7 +237,6 @@ impl Hand {
             .filter_map(|pair| (pair[0] == pair[1]).then_some(pair[0]))
             .collect::<Vec<_>>();
         let count = duped.len();
-        duped.sort();
         // Ascend
         let counted = {
             let cn = duped.iter().map(|a| a.clone()).counts();
