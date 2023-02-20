@@ -167,7 +167,7 @@ impl Hand {
             (Some(_), Some(num), _) => (Hands::StraightFlush, num),
             (None, Some(num), _) => (Hands::Straight, num),
             (Some(num), None, _) => (Hands::Flush, num),
-            (_, _, (5, nums)) => (Hands::FourOfAKind, nums),
+            (_, _, (6, nums)) => (Hands::FourOfAKind, nums),
             (_, _, (4, nums)) => (Hands::FullHouse, nums),
             (_, _, (3, nums)) => (Hands::ThreeOfAKind, nums),
             (_, _, (2, nums)) => (Hands::TwoPair, nums),
