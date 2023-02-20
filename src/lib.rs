@@ -29,7 +29,7 @@ pub fn winning_hands<'a>(hands_strs: &[&'a str]) -> Vec<&'a str> {
 }
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
-pub enum Kind2 {
+pub enum Suit {
     Heart,
     Diamond,
     Clover,
@@ -37,13 +37,13 @@ pub enum Kind2 {
     Joker,
 }
 
-impl From<&str> for Kind2 {
+impl From<&str> for Suit {
     fn from(value: &str) -> Self {
         match value {
-            "H" => Kind2::Heart,
-            "D" => Kind2::Diamond,
-            "C" => Kind2::Clover,
-            "S" => Kind2::Spade,
+            "H" => Suit::Heart,
+            "D" => Suit::Diamond,
+            "C" => Suit::Clover,
+            "S" => Suit::Spade,
             a => panic!("Unrecognizable kind: {a}"),
         }
     }
@@ -103,7 +103,7 @@ impl Add<u8> for Number {
 
 #[derive(Debug, Clone)]
 struct Card {
-    kind: Kind2,
+    kind: Suit,
     num: Number,
 }
 
@@ -323,11 +323,11 @@ mod tests {
     #[test]
     fn card_eq() {
         let a = Card {
-            kind: Kind2::Clover,
+            kind: Suit::Clover,
             num: Number(1),
         };
         let b = Card {
-            kind: Kind2::Diamond,
+            kind: Suit::Diamond,
             num: Number(1),
         };
         assert_eq!(a, b);
