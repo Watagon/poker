@@ -22,7 +22,7 @@ pub fn winning_hands<'a>(hands_strs: &[&'a str]) -> Vec<&'a str> {
     let max = res.peek().unwrap().1;
     let mut res = res.filter(|a| a.1.eq(max)).collect::<Vec<_>>();
     res.sort_by_key(|a| a.0);
-    res.iter().map(|a| hands_strs[a.0]).collect();
+    res.iter().map(|a| hands_strs[a.0]).collect()
 
     // let a = hands_strs
     //     .iter()
