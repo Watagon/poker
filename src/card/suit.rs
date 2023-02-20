@@ -4,7 +4,7 @@ pub(crate) enum Suit {
     Diamond,
     Clover,
     Spade,
-    Joker,
+    _Joker,
 }
 
 impl From<&str> for Suit {
