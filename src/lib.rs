@@ -1,4 +1,4 @@
-use std::{cell::RefCell, collections::HashMap, num, ops::Add};
+use std::{cell::RefCell, ops::Add};
 
 use itertools::Itertools;
 // use itertools::Itertools;
@@ -9,39 +9,24 @@ use itertools::Itertools;
 /// the winning hand(s) as were passed in, not reconstructed strings which happen to be equal.
 pub fn winning_hands<'a>(hands_strs: &[&'a str]) -> Vec<&'a str> {
     // unimplemented!("Out of {hands:?}, which hand wins?")
-    let hands: Vec<Hand> = hands_strs.iter().map(|&a| a.into()).collect();
-    let res = hands
+    hands_strs
         .iter()
+        .map(|&a| Hand::from(a))
         .enumerate()
         .sorted_by(|a, b| {
-            a.1.partial_cmp(b.1)
+            a.1.partial_cmp(&b.1)
                 .unwrap_or_else(|| panic!("Err: partial_cmp: a: {a:?}, b: {b:?}"))
         })
-        .rev();
-    let mut res = res.peekable();
-    let max = res.peek().unwrap().1;
-    let mut res = res.filter(|a| a.1.eq(max)).collect::<Vec<_>>();
-    res.sort_by_key(|a| a.0);
-    res.iter().map(|a| hands_strs[a.0]).collect()
-
-    // let a = hands_strs
-    //     .iter()
-    //     .map(|&a| Hand::from(a))
-    //     .enumerate()
-    //     .sorted_by(|a, b| {
-    //         a.1.partial_cmp(&b.1)
-    //             .unwrap_or_else(|| panic!("Err: partial_cmp: a: {a:?}, b: {b:?}"))
-    //     })
-    //     .rev()
-    //     .fold(Vec::<(usize, Hand)>::new(), |mut acc, x| {
-    //         if acc.is_empty() || acc.first().unwrap().1.eq(&x.1) {
-    //             acc.push(x);
-    //         }
-    //         acc
-    //     })
-    //     .into_iter()
-    //     .sorted_by_key(|a| a.0);
-    // res.iter().map(|a| hands_strs[a.0]).collect()
+        .rev()
+        .fold(Vec::<(usize, Hand)>::new(), |mut acc, x| {
+            if acc.is_empty() || acc.first().unwrap().1.eq(&x.1) {
+                acc.push(x);
+            }
+            acc
+        })
+        .into_iter()
+        .sorted_by_key(|a| a.0)
+        .map(|a| hands_strs[a.0]).collect()
 }
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
@@ -60,7 +45,7 @@ impl From<&str> for Kind2 {
             "D" => Kind2::Diamond,
             "C" => Kind2::Clover,
             "S" => Kind2::Spade,
-            a => panic!("Unrecognizable kind: {}", a),
+            a => panic!("Unrecognizable kind: {a}"),
         }
     }
 }
@@ -217,10 +202,6 @@ impl Hand {
             })
     }
 
-    fn is_straight_flush(&self) -> Option<Vec<Number>> {
-        self.is_flush().and_then(|_| self.is_straight())
-    }
-
     /// 6 => Four of a kind
     /// 4 => Full House
     /// 3 => Three of a kind
@@ -229,7 +210,7 @@ impl Hand {
     /// compare with `Vec<Number>`
     /// first element is more important to rank
     fn count_same_number_combination(&self) -> (i32, Vec<Number>) {
-        let mut duped = self
+        let duped = self
             .0
             .iter()
             .map(|a| a.num)
@@ -239,7 +220,7 @@ impl Hand {
         let count = duped.len();
         // Ascend
         let counted = {
-            let cn = duped.iter().map(|a| a.clone()).counts();
+            let cn = duped.into_iter().counts();
             let mut cnv = cn.into_iter().collect::<Vec<_>>();
             // both hands have a full house, tie goes to highest-ranked triplet
             cnv.sort_by_key(|a| a.0); // secondary key
@@ -248,7 +229,6 @@ impl Hand {
             cnv
         };
         let mut nums = counted.into_iter().map(|a| a.0).rev().collect::<Vec<_>>();
-        println!("nums: {nums:?}");
         // not duped numbers
         let mut remained = self
             .0
@@ -275,11 +255,9 @@ impl PartialOrd for Hand {
         let sh = self.hand();
         let oh = other.hand();
         if sh.0 == oh.0 {
-            let sn = &self.0;
-            let on = &other.0;
             use Hands::*;
             match sh.0 {
-                FiveOfAKind => Some(std::cmp::Ordering::Equal),
+                _FiveOfAKind => Some(std::cmp::Ordering::Equal),
                 StraightFlush | FourOfAKind | FullHouse | Flush | Straight | ThreeOfAKind
                 | TwoPair | OnePair => sh.1.partial_cmp(&oh.1),
                 HighCard => {
@@ -301,7 +279,7 @@ impl PartialOrd for Hand {
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 enum Hands {
     // opt
-    FiveOfAKind = 10,
+    _FiveOfAKind = 10,
     StraightFlush = 9,
     FourOfAKind = 8,
     FullHouse = 7,
@@ -320,7 +298,7 @@ mod tests {
     #[test]
     fn from() {
         let a = "4S 5H 5S 5D 5C";
-        let hand = Hand::from(a);
+        let _hand = Hand::from(a);
 
         // assert_eq!(
         //     hand,
